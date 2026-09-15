@@ -164,6 +164,7 @@
     <h2>Calculadora de precios</h2>
 
     <label>Tipo de servicio</label>
+
     <select id="servicio">
       <option value="0">Selecciona un servicio</option>
       <option value="410">Set de uñas</option>
@@ -174,6 +175,7 @@
     </select>
 
     <label>Largo</label>
+
     <div class="options">
       <div class="option" data-price="0">Largo 1</div>
       <div class="option" data-price="0">Largo 2</div>
@@ -186,8 +188,10 @@
   <div class="card">
     <h2>Diseños y efectos</h2>
 
+    <!-- El aura NO tiene precio propio.
+         Se calcula exclusivamente por número de uñas. -->
     <label class="check">
-      <input type="checkbox" value="10">
+      <input type="checkbox" id="efectoAura">
       Efecto aura — $10 por uña
     </label>
 
@@ -202,7 +206,14 @@
     </label>
 
     <label>Número de uñas con efecto aura</label>
-    <input type="number" id="auraUñas" min="0" max="10" value="0">
+
+    <input
+      type="number"
+      id="auraUñas"
+      min="0"
+      max="10"
+      value="0"
+    >
   </div>
 
   <div class="card">
@@ -229,7 +240,10 @@
     <div class="price" id="total">$0</div>
 
     <button onclick="compartir()">Compartir precio</button>
-    <button class="secondary" onclick="calcular()">Actualizar precio</button>
+
+    <button class="secondary" onclick="calcular()">
+      Actualizar precio
+    </button>
   </div>
 
   <div class="note">
@@ -244,13 +258,18 @@
 
   const servicio = document.getElementById("servicio");
   const auraUñas = document.getElementById("auraUñas");
+  const efectoAura = document.getElementById("efectoAura");
   const total = document.getElementById("total");
   const resumen = document.getElementById("resumen");
 
   let largoExtra = 0;
   let largoSeleccionado = "";
 
+  /*
+   * SELECCIÓN DE LARGO
+   */
   document.querySelectorAll(".option").forEach(option => {
+
     option.addEventListener("click", () => {
 
       document.querySelectorAll(".option").forEach(o => {
@@ -264,48 +283,144 @@
 
       calcular();
     });
+
   });
 
-  document.querySelectorAll("input[type='checkbox']").forEach(input => {
-    input.addEventListener("change", calcular);
-  });
 
-  servicio.addEventListener("change", calcular);
-  auraUñas.addEventListener("input", calcular);
+  /*
+   * CHECKBOXES NORMALES
+   *
+   * Se excluye el aura porque su precio
+   * se calcula aparte por número de uñas.
+   */
+  document.querySelectorAll("input[type='checkbox']:not(#efectoAura)")
+    .forEach(input => {
 
-  function calcular() {
+      input.addEventListener("change", calcular);
 
-    let base = Number(servicio.value);
-
-    let extras = largoExtra;
-
-    document.querySelectorAll("input[type='checkbox']:checked").forEach(input => {
-      extras += Number(input.value);
     });
 
-    let aura = Number(auraUñas.value || 0);
 
-    extras -= aura * 10;
+  /*
+   * CAMBIOS
+   */
+  servicio.addEventListener("change", calcular);
 
-    extras += aura * 10;
+  auraUñas.addEventListener("input", calcular);
 
-    let precioFinal = base + extras;
+  efectoAura.addEventListener("change", calcular);
+
+
+  /*
+   * CÁLCULO PRINCIPAL
+   */
+  function calcular() {
+
+    const base = Number(servicio.value);
+
+    /*
+     * Comenzamos únicamente con el costo
+     * adicional del largo.
+     */
+    let extras = largoExtra;
+
+
+    /*
+     * Sumamos los efectos normales:
+     *
+     * Cat eye / espejo / aurora
+     * French
+     * Reparación
+     * Retiro
+     */
+    document
+      .querySelectorAll("input[type='checkbox']:checked:not(#efectoAura)")
+      .forEach(input => {
+
+        extras += Number(input.value);
+
+      });
+
+
+    /*
+     * EFECTO AURA
+     *
+     * $10 por uña.
+     *
+     * Solo se cobra si el efecto está marcado.
+     */
+    let aura = 0;
+
+    if (efectoAura.checked) {
+
+      aura = Math.min(
+        Math.max(Number(auraUñas.value || 0), 0),
+        10
+      );
+
+      extras += aura * 10;
+
+    }
+
+
+    /*
+     * PRECIO FINAL
+     */
+    const precioFinal = base + extras;
 
     total.textContent = "$" + precioFinal;
 
+
+    /*
+     * Si todavía no hay servicio,
+     * mostramos el mensaje inicial.
+     */
     if (base === 0) {
-      resumen.innerHTML = "Selecciona tus servicios para calcular el precio.";
+
+      resumen.innerHTML =
+        "Selecciona tus servicios para calcular el precio.";
+
       return;
+
     }
 
-    resumen.innerHTML = `
+
+    /*
+     * RESUMEN
+     */
+    let detalles = `
       <strong>${servicio.options[servicio.selectedIndex].text}</strong><br>
-      ${largoSeleccionado ? largoSeleccionado + "<br>" : ""}
-      ${aura > 0 ? "Efecto aura: " + aura + " uñas<br>" : ""}
+    `;
+
+    if (largoSeleccionado) {
+
+      detalles += largoSeleccionado + "<br>";
+
+    }
+
+    if (efectoAura.checked && aura > 0) {
+
+      detalles +=
+        "Efecto aura: " +
+        aura +
+        " uñas × $10 = $" +
+        (aura * 10) +
+        "<br>";
+
+    }
+
+    detalles += `
       Precio total: <strong>$${precioFinal}</strong>
     `;
+
+    resumen.innerHTML = detalles;
+
   }
-  
+
+
+  /*
+   * COMPARTIR
+   */
   function compartir() {
 
     const texto = `ÉLORA studio
@@ -319,16 +434,29 @@ Total: ${total.textContent}
 
 Donde el cuidado se convierte en arte`;
 
+
     if (navigator.share) {
+
       navigator.share({
         title: "ÉLORA studio",
         text: texto
       });
+
     } else {
+
       navigator.clipboard.writeText(texto);
+
       alert("Precio copiado para compartir.");
+
     }
+
   }
+
+
+  /*
+   * CÁLCULO INICIAL
+   */
+  calcular();
 
 </script>
 
