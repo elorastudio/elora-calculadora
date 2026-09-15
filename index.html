@@ -1,462 +1,1092 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ÉLORA studio | Calculadora</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>ÉLORA studio · Calculadora</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f8f3f4;
-      color: #3d3034;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    .app {
-      max-width: 480px;
-      margin: auto;
-      padding: 24px 18px 40px;
-    }
+body {
+  margin: 0;
+  background: #f7f2f4;
+  color: #40363a;
+  font-family: Arial, sans-serif;
+}
 
-    .logo {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+.app {
+  max-width: 680px;
+  margin: auto;
+  padding: 22px 16px 40px;
+}
 
-    .logo h1 {
-      margin: 0;
-      font-family: Georgia, serif;
-      font-size: 34px;
-      letter-spacing: 3px;
-      font-weight: normal;
-    }
+.brand {
+  text-align: center;
+}
 
-    .logo p {
-      margin: 5px 0 0;
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: #8c747b;
-    }
+.brand h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 32px;
+  letter-spacing: 2px;
+}
 
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 5px 20px rgba(80, 50, 60, 0.08);
-    }
+.brand p {
+  margin: 5px 0 22px;
+  font-size: 12px;
+  letter-spacing: .5px;
+}
 
-    h2 {
-      margin: 0 0 15px;
-      font-family: Georgia, serif;
-      font-size: 20px;
-      font-weight: normal;
-    }
+.card {
+  background: white;
+  border: 1px solid #eadfe3;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 12px 0;
+  box-shadow: 0 5px 18px rgba(0,0,0,.04);
+}
 
-    label {
-      display: block;
-      margin: 13px 0 6px;
-      font-size: 13px;
-      color: #756269;
-    }
+h2 {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  margin: 0 0 14px;
+}
 
-    select,
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd0d4;
-      border-radius: 12px;
-      background: #fff;
-      color: #3d3034;
-      font-size: 15px;
-    }
+label {
+  display: block;
+  font-size: 13px;
+  margin: 10px 0 6px;
+}
 
-    .options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-    }
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d9cbd0;
+  border-radius: 12px;
+  background: white;
+  color: #40363a;
+  font: inherit;
+}
 
-    .option {
-      border: 1px solid #ddd0d4;
-      border-radius: 12px;
-      padding: 11px;
-      text-align: center;
-      cursor: pointer;
-      background: #fff;
-      font-size: 14px;
-    }
+.hidden {
+  display: none !important;
+}
 
-    .option.active {
-      background: #eadde1;
-      border-color: #b99ca5;
-    }
+/* LARGOS */
 
-    .check {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin: 10px 0;
-      font-size: 14px;
-    }
+.lengths {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
 
-    .check input {
-      width: auto;
-    }
+.length {
+  border: 1px solid #d9cbd0;
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: left;
+  color: #40363a;
+}
 
-    .price {
-      text-align: center;
-      font-family: Georgia, serif;
-      font-size: 38px;
-      margin: 10px 0;
-    }
+.length.active {
+  border-color: #8f6f7b;
+  background: #f3e9ed;
+}
 
-    .summary {
-      background: #f8f3f4;
-      border-radius: 14px;
-      padding: 15px;
-      font-size: 14px;
-      line-height: 1.6;
-    }
+.length b {
+  display: block;
+  margin-bottom: 3px;
+}
 
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 10px;
-      font-size: 15px;
-      cursor: pointer;
-      background: #4c3a40;
-      color: white;
-    }
+.muted {
+  font-size: 11px;
+  color: #81757a;
+}
 
-    button.secondary {
-      background: #eadde1;
-      color: #4c3a40;
-    }
+/* EFECTOS Y EXTRAS */
 
-    .note {
-      text-align: center;
-      font-size: 11px;
-      color: #8c747b;
-      margin-top: 18px;
-      line-height: 1.5;
-    }
-  </style>
+.effect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 0;
+  border-bottom: 1px solid #eee5e8;
+}
+
+.effect:last-child {
+  border-bottom: none;
+}
+
+.name {
+  flex: 1;
+  font-size: 13px;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.qty button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d9cbd0;
+  border-radius: 50%;
+  background: white;
+  color: #40363a;
+  font-size: 17px;
+}
+
+.qty span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* RESUMEN */
+
+.summary {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.total {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.primary,
+.secondary {
+  border: 0;
+  border-radius: 12px;
+  padding: 13px;
+  font: inherit;
+}
+
+.primary {
+  background: #765966;
+  color: white;
+}
+
+.secondary {
+  background: #eee5e8;
+  color: #4d4146;
+}
+
+.note {
+  text-align: center;
+  font-size: 11px;
+  color: #81757a;
+  line-height: 1.5;
+  margin-top: 15px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <div class="logo">
-    <h1>ÉLORA</h1>
-    <p>STUDIO</p>
-  </div>
+<header class="brand">
+  <h1>ÉLORA studio</h1>
+  <p>Dónde el cuidado se convierte en arte</p>
+</header>
 
-  <div class="card">
-    <h2>Calculadora de precios</h2>
 
-    <label>Tipo de servicio</label>
+<!-- SERVICIO -->
 
-    <select id="servicio">
-      <option value="0">Selecciona un servicio</option>
-      <option value="410">Set de uñas</option>
-      <option value="280">Baño de acrílico</option>
-      <option value="300">Pedicure clásico</option>
-      <option value="350">Pedicure spa</option>
-      <option value="450">Pedi spa con acripié</option>
-    </select>
+<section class="card">
 
-    <label>Largo</label>
+<h2>Servicio</h2>
 
-    <div class="options">
-      <div class="option" data-price="0">Largo 1</div>
-      <div class="option" data-price="0">Largo 2</div>
-      <div class="option" data-price="0">Largo 3</div>
-      <div class="option" data-price="50">Largo 4</div>
-      <div class="option" data-price="100">Largo 5</div>
-    </div>
-  </div>
+<select id="service">
 
-  <div class="card">
-    <h2>Diseños y efectos</h2>
+  <option value="acrylic">
+    Set nuevo de acrílico
+  </option>
 
-    <!-- El aura NO tiene precio propio.
-         Se calcula exclusivamente por número de uñas. -->
-    <label class="check">
-      <input type="checkbox" id="efectoAura">
-      Efecto aura — $10 por uña
-    </label>
+  <option value="retouch">
+    Retoque de acrílico
+  </option>
 
-    <label class="check">
-      <input type="checkbox" value="80">
-      Cat eye / espejo / aurora
-    </label>
+  <option value="gel">
+    Gel semipermanente
+  </option>
 
-    <label class="check">
-      <input type="checkbox" value="50">
-      French — desde $50
-    </label>
+  <option value="rubber">
+    Rubber gel
+  </option>
 
-    <label>Número de uñas con efecto aura</label>
+  <option value="bath">
+    Baño de acrílico
+  </option>
 
-    <input
-      type="number"
-      id="auraUñas"
-      min="0"
-      max="10"
-      value="0"
-    >
-  </div>
+  <option value="acripie">
+    Acripié
+  </option>
 
-  <div class="card">
-    <h2>Extras</h2>
+</select>
 
-    <label class="check">
-      <input type="checkbox" value="50">
-      Reparación de uña — $50
-    </label>
 
-    <label class="check">
-      <input type="checkbox" value="100">
-      Retiro de acrílico — $100
-    </label>
-  </div>
+<div id="gelBox" class="hidden">
 
-  <div class="card">
-    <h2>Resumen</h2>
+<label>Modalidad</label>
 
-    <div class="summary" id="resumen">
-      Selecciona tus servicios para calcular el precio.
-    </div>
+<select id="gelType">
 
-    <div class="price" id="total">$0</div>
+  <option value="hands">
+    Manos — $300
+  </option>
 
-    <button onclick="compartir()">Compartir precio</button>
+  <option value="feet">
+    Pies — $300
+  </option>
 
-    <button class="secondary" onclick="calcular()">
-      Actualizar precio
-    </button>
-  </div>
+  <option value="maniSpa">
+    Mani spa — $400
+  </option>
 
-  <div class="note">
-    Nuestros servicios incluyen uno o dos tonos lisos de gel semipermanente.
-    <br><br>
-    ÉLORA studio · Donde el cuidado se convierte en arte
-  </div>
+  <option value="pediSpa">
+    Pedi spa — $400
+  </option>
+
+</select>
 
 </div>
 
+</section>
+
+
+<!-- LARGO -->
+
+<section id="lengthCard" class="card">
+
+<h2>Largo</h2>
+
+<div id="lengths" class="lengths"></div>
+
+</section>
+
+
+<!-- EFECTOS -->
+
+<section id="effectsCard" class="card">
+
+<h2>
+Diseños y efectos
+<span class="muted">· por uña</span>
+</h2>
+
+<div id="effects"></div>
+
+</section>
+
+
+<!-- EXTRAS -->
+
+<section class="card">
+
+<h2>Extras</h2>
+
+<div id="extras"></div>
+
+</section>
+
+
+<!-- RESUMEN -->
+
+<section class="card">
+
+<h2>Resumen</h2>
+
+<div id="summary" class="summary"></div>
+
+<div id="total" class="total">
+$0
+</div>
+
+<div class="actions">
+
+<button class="primary" id="share">
+Compartir
+</button>
+
+<button class="secondary" id="reset">
+Reiniciar
+</button>
+
+</div>
+
+</section>
+
+
+<p class="note">
+Nuestros servicios incluyen uno o dos tonos lisos de gel semipermanente.
+</p>
+
+</div>
+
+
 <script>
 
-  const servicio = document.getElementById("servicio");
-  const auraUñas = document.getElementById("auraUñas");
-  const efectoAura = document.getElementById("efectoAura");
-  const total = document.getElementById("total");
-  const resumen = document.getElementById("resumen");
+/* =====================================================
+   PRECIOS DEFINITIVOS ÉLORA
+===================================================== */
 
-  let largoExtra = 0;
-  let largoSeleccionado = "";
+const defaultPrices = {
 
-  /*
-   * SELECCIÓN DE LARGO
-   */
-  document.querySelectorAll(".option").forEach(option => {
+  /* LARGOS */
 
-    option.addEventListener("click", () => {
+  length: [
+    400,
+    450,
+    500,
+    550,
+    600
+  ],
 
-      document.querySelectorAll(".option").forEach(o => {
-        o.classList.remove("active");
-      });
+  /* GEL */
 
-      option.classList.add("active");
+  gel: [
+    300,
+    300,
+    400,
+    400
+  ],
 
-      largoExtra = Number(option.dataset.price);
-      largoSeleccionado = option.textContent;
+  /* SERVICIOS */
 
-      calcular();
-    });
+  rubber: 350,
+
+  bath: 350,
+
+  acripie: 500,
+
+  /* EXTRAS */
+
+  extension: 50,
+
+  removeGel: 50,
+
+  removeAcrylic: 100,
+
+  removeOther: 150,
+
+  /* EFECTOS */
+
+  effects: [
+
+    10, // Ojo de gato
+    10, // Espejo
+    10, // Aurora
+    10, // Azúcar
+    10, // Sweater
+    10, // Perla
+    5,  // Glitter
+    15, // Carey
+    10, // Blooming
+    15, // Aura
+    15, // Baby boomer
+    10, // Relieve
+    15, // Alto relieve
+    25, // Flor 3D
+    5,  // Francés
+    5,  // Nail art simple
+    15, // Nail art medio
+    30, // Nail art medio alto
+    10, // Encapsulado
+    10, // Naturaleza muerta
+    25, // Dijes
+    5,  // Sticker
+    20, // Cristales CH
+    30, // Cristales M
+    40, // Cristales G
+    20, // Uña completa cristal L1-2
+    35, // Uña completa cristal L3-4
+    50  // Uña completa cristal L5-6
+
+  ]
+
+};
+
+
+/* =====================================================
+   NOMBRES DE EFECTOS
+===================================================== */
+
+const effectNames = [
+
+  "Ojo de gato",
+  "Espejo",
+  "Aurora",
+  "Azúcar",
+  "Sweater",
+  "Perla",
+  "Glitter",
+  "Carey",
+  "Blooming",
+  "Aura",
+  "Baby boomer",
+  "Relieve",
+  "Alto relieve",
+  "Flor 3D",
+  "Francés",
+  "Nail art simple",
+  "Nail art medio",
+  "Nail art medio alto",
+  "Encapsulado",
+  "Naturaleza muerta",
+  "Dijes",
+  "Sticker",
+  "Diseño cristales CH",
+  "Diseño cristales M",
+  "Diseño cristales G",
+  "Uña completa cristal (largo 1-2)",
+  "Uña completa cristal (largo 3-4)",
+  "Uña completa cristal (largo 5-6)"
+
+];
+
+
+/* =====================================================
+   PRECIOS EDITABLES
+===================================================== */
+
+let prices =
+  JSON.parse(localStorage.getItem("eloraPrices")) ||
+  JSON.parse(JSON.stringify(defaultPrices));
+
+
+/* =====================================================
+   ESTADO
+===================================================== */
+
+let selectedLength = 0;
+
+let effectCounts =
+  new Array(effectNames.length).fill(0);
+
+let extras = {
+
+  extension: 0,
+
+  removeGel: 0,
+
+  removeAcrylic: 0,
+
+  removeOther: 0
+
+};
+
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const service =
+  document.getElementById("service");
+
+const gelBox =
+  document.getElementById("gelBox");
+
+const gelType =
+  document.getElementById("gelType");
+
+const lengthCard =
+  document.getElementById("lengthCard");
+
+const effectsCard =
+  document.getElementById("effectsCard");
+
+const lengths =
+  document.getElementById("lengths");
+
+const effects =
+  document.getElementById("effects");
+
+const extrasContainer =
+  document.getElementById("extras");
+
+const summary =
+  document.getElementById("summary");
+
+const totalElement =
+  document.getElementById("total");
+
+const shareButton =
+  document.getElementById("share");
+
+const resetButton =
+  document.getElementById("reset");
+
+
+/* =====================================================
+   FORMATO DE DINERO
+===================================================== */
+
+function money(value) {
+
+  return "$" +
+    value.toLocaleString("es-MX");
+
+}
+
+
+/* =====================================================
+   RENDER LARGOS
+===================================================== */
+
+function renderLengths() {
+
+  lengths.innerHTML =
+    prices.length.map((price, index) => {
+
+      return `
+
+        <button
+          class="length ${index === selectedLength ? "active" : ""}"
+          onclick="setLength(${index})"
+        >
+
+          <b>
+            Largo ${index + 1}
+          </b>
+
+          <span>
+            ${money(price)}
+          </span>
+
+        </button>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function setLength(index) {
+
+  selectedLength = index;
+
+  renderLengths();
+
+  calculate();
+
+}
+
+
+/* =====================================================
+   RENDER EFECTOS
+===================================================== */
+
+function renderEffects() {
+
+  effects.innerHTML =
+    effectNames.map((name, index) => {
+
+      return `
+
+        <div class="effect">
+
+          <span class="name">
+
+            ${name}
+
+            <br>
+
+            <span class="muted">
+
+              ${money(prices.effects[index])}
+              / uña
+
+            </span>
+
+          </span>
+
+
+          <div class="qty">
+
+            <button
+              onclick="changeEffect(${index}, -1)"
+            >
+              −
+            </button>
+
+            <span>
+              ${effectCounts[index]}
+            </span>
+
+            <button
+              onclick="changeEffect(${index}, 1)"
+            >
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function changeEffect(index, amount) {
+
+  effectCounts[index] =
+    Math.max(
+      0,
+      effectCounts[index] + amount
+    );
+
+  renderEffects();
+
+  calculate();
+
+}
+
+
+/* =====================================================
+   EXTRAS
+===================================================== */
+
+const extraNames = {
+
+  extension:
+    "Extensión de uña",
+
+  removeGel:
+    "Retiro de gel",
+
+  removeAcrylic:
+    "Retiro de acrílico",
+
+  removeOther:
+    "Retiro de otro salón"
+
+};
+
+
+function renderExtras() {
+
+  extrasContainer.innerHTML =
+    Object.keys(extraNames).map(key => {
+
+      return `
+
+        <div class="effect">
+
+          <span class="name">
+
+            ${extraNames[key]}
+
+            <br>
+
+            <span class="muted">
+
+              ${money(prices[key])}
+              / unidad
+
+            </span>
+
+          </span>
+
+
+          <div class="qty">
+
+            <button
+              onclick="changeExtra('${key}', -1)"
+            >
+              −
+            </button>
+
+            <span>
+              ${extras[key]}
+            </span>
+
+            <button
+              onclick="changeExtra('${key}', 1)"
+            >
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function changeExtra(key, amount) {
+
+  extras[key] =
+    Math.max(
+      0,
+      extras[key] + amount
+    );
+
+  renderExtras();
+
+  calculate();
+
+}
+
+
+/* =====================================================
+   PRECIO BASE
+===================================================== */
+
+function getBasePrice() {
+
+  const selected =
+    service.value;
+
+
+  if (
+    selected === "acrylic" ||
+    selected === "retouch"
+  ) {
+
+    return prices.length[selectedLength];
+
+  }
+
+
+  if (selected === "gel") {
+
+    return prices.gel[
+      gelType.selectedIndex
+    ];
+
+  }
+
+
+  return prices[selected];
+
+}
+
+
+/* =====================================================
+   CÁLCULO TOTAL
+===================================================== */
+
+function calculate() {
+
+  const base =
+    getBasePrice();
+
+
+  let effectsTotal = 0;
+
+
+  effectCounts.forEach(
+    (count, index) => {
+
+      effectsTotal +=
+        count *
+        prices.effects[index];
+
+    }
+  );
+
+
+  let extrasTotal = 0;
+
+
+  Object.keys(extras).forEach(key => {
+
+    extrasTotal +=
+      extras[key] *
+      prices[key];
 
   });
 
 
-  /*
-   * CHECKBOXES NORMALES
-   *
-   * Se excluye el aura porque su precio
-   * se calcula aparte por número de uñas.
-   */
-  document.querySelectorAll("input[type='checkbox']:not(#efectoAura)")
-    .forEach(input => {
-
-      input.addEventListener("change", calcular);
-
-    });
+  const total =
+    base +
+    effectsTotal +
+    extrasTotal;
 
 
-  /*
-   * CAMBIOS
-   */
-  servicio.addEventListener("change", calcular);
-
-  auraUñas.addEventListener("input", calcular);
-
-  efectoAura.addEventListener("change", calcular);
+  let lines = [];
 
 
-  /*
-   * CÁLCULO PRINCIPAL
-   */
-  function calcular() {
-
-    const base = Number(servicio.value);
-
-    /*
-     * Comenzamos únicamente con el costo
-     * adicional del largo.
-     */
-    let extras = largoExtra;
+  lines.push(
+    service.options[
+      service.selectedIndex
+    ].text +
+    ": " +
+    money(base)
+  );
 
 
-    /*
-     * Sumamos los efectos normales:
-     *
-     * Cat eye / espejo / aurora
-     * French
-     * Reparación
-     * Retiro
-     */
-    document
-      .querySelectorAll("input[type='checkbox']:checked:not(#efectoAura)")
-      .forEach(input => {
+  if (
+    service.value === "acrylic" ||
+    service.value === "retouch"
+  ) {
 
-        extras += Number(input.value);
+    lines[0] +=
+      " · Largo " +
+      (selectedLength + 1);
 
-      });
+  }
 
 
-    /*
-     * EFECTO AURA
-     *
-     * $10 por uña.
-     *
-     * Solo se cobra si el efecto está marcado.
-     */
-    let aura = 0;
+  effectCounts.forEach(
+    (count, index) => {
 
-    if (efectoAura.checked) {
+      if (count > 0) {
 
-      aura = Math.min(
-        Math.max(Number(auraUñas.value || 0), 0),
-        10
+        lines.push(
+
+          effectNames[index] +
+          " × " +
+          count +
+          ": " +
+          money(
+            count *
+            prices.effects[index]
+          )
+
+        );
+
+      }
+
+    }
+  );
+
+
+  Object.keys(extras).forEach(key => {
+
+    if (extras[key] > 0) {
+
+      lines.push(
+
+        extraNames[key] +
+        " × " +
+        extras[key] +
+        ": " +
+        money(
+          extras[key] *
+          prices[key]
+        )
+
       );
-
-      extras += aura * 10;
 
     }
 
-
-    /*
-     * PRECIO FINAL
-     */
-    const precioFinal = base + extras;
-
-    total.textContent = "$" + precioFinal;
+  });
 
 
-    /*
-     * Si todavía no hay servicio,
-     * mostramos el mensaje inicial.
-     */
-    if (base === 0) {
+  summary.innerHTML =
+    lines.join("<br>");
 
-      resumen.innerHTML =
-        "Selecciona tus servicios para calcular el precio.";
+
+  totalElement.textContent =
+    money(total);
+
+
+  return total;
+
+}
+
+
+/* =====================================================
+   MOSTRAR / OCULTAR SECCIONES
+===================================================== */
+
+function updateSections() {
+
+  const selected =
+    service.value;
+
+
+  const isAcrylic =
+    selected === "acrylic" ||
+    selected === "retouch";
+
+
+  lengthCard.classList.toggle(
+    "hidden",
+    !isAcrylic
+  );
+
+
+  effectsCard.classList.toggle(
+    "hidden",
+    !isAcrylic
+  );
+
+
+  gelBox.classList.toggle(
+    "hidden",
+    selected !== "gel"
+  );
+
+
+  calculate();
+
+}
+
+
+/* =====================================================
+   EVENTOS
+===================================================== */
+
+service.addEventListener(
+  "change",
+  updateSections
+);
+
+
+gelType.addEventListener(
+  "change",
+  calculate
+);
+
+
+/* =====================================================
+   COMPARTIR
+===================================================== */
+
+shareButton.addEventListener(
+  "click",
+  async () => {
+
+    const text =
+
+      "ÉLORA studio\n\n" +
+
+      summary.innerText +
+
+      "\n\nTotal: " +
+
+      totalElement.innerText;
+
+
+    if (
+      navigator.share
+    ) {
+
+      try {
+
+        await navigator.share({
+
+          title:
+            "ÉLORA studio",
+
+          text:
+            text
+
+        });
+
+      } catch (error) {}
 
       return;
 
     }
 
 
-    /*
-     * RESUMEN
-     */
-    let detalles = `
-      <strong>${servicio.options[servicio.selectedIndex].text}</strong><br>
-    `;
+    try {
 
-    if (largoSeleccionado) {
-
-      detalles += largoSeleccionado + "<br>";
-
-    }
-
-    if (efectoAura.checked && aura > 0) {
-
-      detalles +=
-        "Efecto aura: " +
-        aura +
-        " uñas × $10 = $" +
-        (aura * 10) +
-        "<br>";
-
-    }
-
-    detalles += `
-      Precio total: <strong>$${precioFinal}</strong>
-    `;
-
-    resumen.innerHTML = detalles;
-
-  }
+      await navigator.clipboard.writeText(
+        text
+      );
 
 
-  /*
-   * COMPARTIR
-   */
-  function compartir() {
-
-    const texto = `ÉLORA studio
-
-Servicio:
-${servicio.options[servicio.selectedIndex].text}
-
-${largoSeleccionado ? largoSeleccionado : ""}
-
-Total: ${total.textContent}
-
-Donde el cuidado se convierte en arte`;
+      shareButton.textContent =
+        "¡Copiado!";
 
 
-    if (navigator.share) {
+      setTimeout(() => {
 
-      navigator.share({
-        title: "ÉLORA studio",
-        text: texto
-      });
+        shareButton.textContent =
+          "Compartir";
 
-    } else {
+      }, 1500);
 
-      navigator.clipboard.writeText(texto);
 
-      alert("Precio copiado para compartir.");
+    } catch (error) {
+
+      alert(text);
 
     }
 
   }
+);
 
 
-  /*
-   * CÁLCULO INICIAL
-   */
-  calcular();
+/* =====================================================
+   REINICIAR
+===================================================== */
+
+resetButton.addEventListener(
+  "click",
+  () => {
+
+    selectedLength = 0;
+
+    effectCounts.fill(0);
+
+
+    Object.keys(extras).forEach(
+      key => {
+
+        extras[key] = 0;
+
+      }
+    );
+
+
+    service.value =
+      "acrylic";
+
+
+    renderLengths();
+
+    renderEffects();
+
+    renderExtras();
+
+    updateSections();
+
+  }
+);
+
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+renderLengths();
+
+renderEffects();
+
+renderExtras();
+
+updateSections();
 
 </script>
 
