@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ÉLORA studio | Calculadora</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f3f4;
+      color: #3d3034;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: auto;
+      padding: 24px 18px 40px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 34px;
+      letter-spacing: 3px;
+      font-weight: normal;
+    }
+
+    .logo p {
+      margin: 5px 0 0;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #8c747b;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 5px 20px rgba(80, 50, 60, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 15px;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      font-weight: normal;
+    }
+
+    label {
+      display: block;
+      margin: 13px 0 6px;
+      font-size: 13px;
+      color: #756269;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd0d4;
+      border-radius: 12px;
+      background: #fff;
+      color: #3d3034;
+      font-size: 15px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .option {
+      border: 1px solid #ddd0d4;
+      border-radius: 12px;
+      padding: 11px;
+      text-align: center;
+      cursor: pointer;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .option.active {
+      background: #eadde1;
+      border-color: #b99ca5;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .check input {
+      width: auto;
+    }
+
+    .price {
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 38px;
+      margin: 10px 0;
+    }
+
+    .summary {
+      background: #f8f3f4;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      background: #4c3a40;
+      color: white;
+    }
+
+    button.secondary {
+      background: #eadde1;
+      color: #4c3a40;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 11px;
+      color: #8c747b;
+      margin-top: 18px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="logo">
+    <h1>ÉLORA</h1>
+    <p>STUDIO</p>
+  </div>
+
+  <div class="card">
+    <h2>Calculadora de precios</h2>
+
+    <label>Tipo de servicio</label>
+    <select id="servicio">
+      <option value="0">Selecciona un servicio</option>
+      <option value="410">Set de uñas</option>
+      <option value="280">Baño de acrílico</option>
+      <option value="300">Pedicure clásico</option>
+      <option value="350">Pedicure spa</option>
+      <option value="450">Pedi spa con acripié</option>
+    </select>
+
+    <label>Largo</label>
+    <div class="options">
+      <div class="option" data-price="0">Largo 1</div>
+      <div class="option" data-price="0">Largo 2</div>
+      <div class="option" data-price="0">Largo 3</div>
+      <div class="option" data-price="50">Largo 4</div>
+      <div class="option" data-price="100">Largo 5</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Diseños y efectos</h2>
+
+    <label class="check">
+      <input type="checkbox" value="10">
+      Efecto aura — $10 por uña
+    </label>
+
+    <label class="check">
+      <input type="checkbox" value="80">
+      Cat eye / espejo / aurora
+    </label>
+
+    <label class="check">
+      <input type="checkbox" value="50">
+      French — desde $50
+    </label>
+
+    <label>Número de uñas con efecto aura</label>
+    <input type="number" id="auraUñas" min="0" max="10" value="0">
+  </div>
+
+  <div class="card">
+    <h2>Extras</h2>
+
+    <label class="check">
+      <input type="checkbox" value="50">
+      Reparación de uña — $50
+    </label>
+
+    <label class="check">
+      <input type="checkbox" value="100">
+      Retiro de acrílico — $100
+    </label>
+  </div>
+
+  <div class="card">
+    <h2>Resumen</h2>
+
+    <div class="summary" id="resumen">
+      Selecciona tus servicios para calcular el precio.
+    </div>
+
+    <div class="price" id="total">$0</div>
+
+    <button onclick="compartir()">Compartir precio</button>
+    <button class="secondary" onclick="calcular()">Actualizar precio</button>
+  </div>
+
+  <div class="note">
+    Nuestros servicios incluyen uno o dos tonos lisos de gel semipermanente.
+    <br><br>
+    ÉLORA studio · Donde el cuidado se convierte en arte
+  </div>
+
+</div>
+
+<script>
+
+  const servicio = document.getElementById("servicio");
+  const auraUñas = document.getElementById("auraUñas");
+  const total = document.getElementById("total");
+  const resumen = document.getElementById("resumen");
+
+  let largoExtra = 0;
+  let largoSeleccionado = "";
+
+  document.querySelectorAll(".option").forEach(option => {
+    option.addEventListener("click", () => {
+
+      document.querySelectorAll(".option").forEach(o => {
+        o.classList.remove("active");
+      });
+
+      option.classList.add("active");
+
+      largoExtra = Number(option.dataset.price);
+      largoSeleccionado = option.textContent;
+
+      calcular();
+    });
+  });
+
+  document.querySelectorAll("input[type='checkbox']").forEach(input => {
+    input.addEventListener("change", calcular);
+  });
+
+  servicio.addEventListener("change", calcular);
+  auraUñas.addEventListener("input", calcular);
+
+  function calcular() {
+
+    let base = Number(servicio.value);
+
+    let extras = largoExtra;
+
+    document.querySelectorAll("input[type='checkbox']:checked").forEach(input => {
+      extras += Number(input.value);
+    });
+
+    let aura = Number(auraUñas.value || 0);
+
+    extras -= aura * 10;
+
+    extras += aura * 10;
+
+    let precioFinal = base + extras;
+
+    total.textContent = "$" + precioFinal;
+
+    if (base === 0) {
+      resumen.innerHTML = "Selecciona tus servicios para calcular el precio.";
+      return;
+    }
+
+    resumen.innerHTML = `
+      <strong>${servicio.options[servicio.selectedIndex].text}</strong><br>
+      ${largoSeleccionado ? largoSeleccionado + "<br>" : ""}
+      ${aura > 0 ? "Efecto aura: " + aura + " uñas<br>" : ""}
+      Precio total: <strong>$${precioFinal}</strong>
+    `;
+  }
+
+  function compartir() {
+
+    const texto = `ÉLORA studio
+
+Servicio:
+${servicio.options[servicio.selectedIndex].text}
+
+${largoSeleccionado ? largoSeleccionado : ""}
+
+Total: ${total.textContent}
+
+Donde el cuidado se convierte en arte`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: "ÉLORA studio",
+        text: texto
+      });
+    } else {
+      navigator.clipboard.writeText(texto);
+      alert("Precio copiado para compartir.");
+    }
+  }
+
+</script>
+
+</body>
+</html>
