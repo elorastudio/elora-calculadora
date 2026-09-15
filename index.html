@@ -418,7 +418,8 @@ const defaultPrices = {
     40, // Cristales G
     20, // Uña completa cristal L1-2
     35, // Uña completa cristal L3-4
-    50  // Uña completa cristal L5-6
+    50, // Uña completa cristal L5-6
+    10  // Jelly
 
   ]
 
@@ -458,7 +459,8 @@ const effectNames = [
   "Diseño cristales G",
   "Uña completa cristal (largo 1-2)",
   "Uña completa cristal (largo 3-4)",
-  "Uña completa cristal (largo 5-6)"
+  "Uña completa cristal (largo 5-6)",
+  "Jelly"
 
 ];
 
@@ -470,6 +472,31 @@ const effectNames = [
 let prices =
   JSON.parse(localStorage.getItem("eloraPrices")) ||
   JSON.parse(JSON.stringify(defaultPrices));
+
+
+/* =====================================================
+   MIGRACIÓN DE PRECIOS
+   Agrega nuevos efectos sin borrar precios
+   personalizados anteriores.
+===================================================== */
+
+if (!Array.isArray(prices.effects)) {
+  prices.effects = [];
+}
+
+if (prices.effects.length < defaultPrices.effects.length) {
+
+  prices.effects = prices.effects.concat(
+    defaultPrices.effects.slice(
+      prices.effects.length
+    )
+  );
+
+  localStorage.setItem(
+    "eloraPrices",
+    JSON.stringify(prices)
+  );
+}
 
 
 /* =====================================================
@@ -928,17 +955,35 @@ function updateSections() {
     selected === "retouch";
 
 
+  /*
+
+     EL LARGO SOLO SE MUESTRA
+     PARA ACRÍLICO Y RETOQUE.
+
+  */
+
   lengthCard.classList.toggle(
     "hidden",
     !isAcrylic
   );
 
 
-  effectsCard.classList.toggle(
-    "hidden",
-    !isAcrylic
-  );
+  /*
 
+     DISEÑOS Y EFECTOS SIEMPRE
+     DEBEN ESTAR VISIBLES.
+
+  */
+
+  effectsCard.classList.remove("hidden");
+
+
+  /*
+
+     LA MODALIDAD SOLO APARECE
+     PARA GEL SEMIPERMANENTE.
+
+  */
 
   gelBox.classList.toggle(
     "hidden",
