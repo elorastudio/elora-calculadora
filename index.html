@@ -1,167 +1,184 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ÉLORA studio · Calculadora</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5eef2">
+<title>ÉLORA studio | Calculadora</title>
 
 <style>
-* {
-  box-sizing: border-box;
+:root {
+  --bg: #f7f2f5;
+  --card: #fff;
+  --text: #40363e;
+  --muted: #8b7d87;
+  --accent: #806476;
+  --accent-light: #f0e6ed;
+  --border: #e6d9e2;
 }
+
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: #f7f2f4;
-  color: #40363a;
+  background: var(--bg);
+  color: var(--text);
   font-family: Arial, sans-serif;
 }
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
 
 .app {
   max-width: 680px;
   margin: auto;
-  padding: 22px 16px 40px;
+  padding: 24px 15px 40px;
 }
 
 .brand {
   text-align: center;
+  margin-bottom: 22px;
 }
 
 .brand h1 {
-  margin: 0;
-  font-family: Georgia, serif;
-  font-size: 32px;
+  font: 32px Georgia, serif;
   letter-spacing: 2px;
+  margin: 0;
 }
 
 .brand p {
-  margin: 5px 0 22px;
   font-size: 12px;
   letter-spacing: .5px;
+  margin: 7px 0 0;
+  color: var(--muted);
 }
 
 .card {
-  background: white;
-  border: 1px solid #eadfe3;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 18px;
-  margin: 12px 0;
-  box-shadow: 0 5px 18px rgba(0,0,0,.04);
+  margin-bottom: 13px;
+  box-shadow: 0 5px 18px #40363e08;
 }
 
 h2 {
-  font-family: Georgia, serif;
-  font-size: 18px;
-  margin: 0 0 14px;
+  font: 19px Georgia, serif;
+  margin: 0 0 15px;
 }
 
 label {
   display: block;
   font-size: 13px;
-  margin: 10px 0 6px;
+  margin: 12px 0 6px;
 }
 
-select {
+select, input[type="number"] {
   width: 100%;
   padding: 12px;
-  border: 1px solid #d9cbd0;
-  border-radius: 12px;
+  border: 1px solid #d9cbd5;
+  border-radius: 11px;
   background: white;
-  color: #40363a;
-  font: inherit;
+  color: var(--text);
+  min-width: 0;
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
-/* LARGOS */
+.muted {
+  font-size: 11px;
+  color: var(--muted);
+}
 
 .lengths {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
 }
 
 .length {
-  border: 1px solid #d9cbd0;
   background: white;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
   text-align: left;
-  color: #40363a;
+  color: var(--text);
 }
 
 .length.active {
-  border-color: #8f6f7b;
-  background: #f3e9ed;
+  background: var(--accent-light);
+  border-color: var(--accent);
 }
 
 .length b {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
-
-.muted {
-  font-size: 11px;
-  color: #81757a;
-}
-
-/* EFECTOS Y EXTRAS */
 
 .effect {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 9px 0;
-  border-bottom: 1px solid #eee5e8;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0e9ed;
 }
 
-.effect:last-child {
-  border-bottom: none;
-}
+.effect:last-child { border-bottom: 0; }
 
-.name {
+.effect-name {
   flex: 1;
+  min-width: 0;
   font-size: 13px;
+  line-height: 1.5;
 }
 
 .qty {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
 .qty button {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #d9cbd0;
+  width: 31px;
+  height: 31px;
   border-radius: 50%;
+  border: 1px solid var(--border);
   background: white;
-  color: #40363a;
-  font-size: 17px;
+  color: var(--text);
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
 .qty span {
-  min-width: 20px;
+  min-width: 18px;
   text-align: center;
   font-size: 13px;
 }
 
-/* RESUMEN */
-
 .summary {
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summary-line span:last-child {
+  text-align: right;
+  white-space: nowrap;
 }
 
 .total {
-  font-size: 25px;
+  font-size: 28px;
   font-weight: bold;
   text-align: center;
-  margin: 15px 0;
+  margin: 18px 0;
 }
 
 .actions {
@@ -170,36 +187,57 @@ select {
   gap: 9px;
 }
 
-.primary,
-.secondary {
+.btn {
+  padding: 13px 10px;
   border: 0;
   border-radius: 12px;
-  padding: 13px;
-  font: inherit;
+  font-size: 13px;
 }
 
 .primary {
-  background: #765966;
+  background: var(--accent);
   color: white;
 }
 
 .secondary {
-  background: #eee5e8;
-  color: #4d4146;
+  background: var(--accent-light);
+  color: var(--text);
 }
 
+.full { grid-column: 1 / -1; }
+
+.price-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 105px;
+  gap: 10px;
+  align-items: center;
+  margin: 11px 0;
+}
+
+.price-row label {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.price-row input { padding: 9px; }
+
 .note {
-  text-align: center;
   font-size: 11px;
-  color: #81757a;
-  line-height: 1.5;
-  margin-top: 15px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+  margin: 15px 8px;
+}
+
+@media (max-width: 360px) {
+  .card { padding: 14px; }
+  .qty { gap: 4px; }
+  .qty button { width: 28px; height: 28px; }
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
 <header class="brand">
@@ -207,190 +245,112 @@ select {
   <p>Dónde el cuidado se convierte en arte</p>
 </header>
 
-
-<!-- SERVICIO -->
-
 <section class="card">
+  <h2>Servicio</h2>
 
-<h2>Servicio</h2>
+  <label for="service">Tipo de servicio</label>
+  <select id="service">
+    <option value="acrylic">Set nuevo de acrílico</option>
+    <option value="retouch">Retoque de acrílico</option>
+    <option value="gel">Gel semipermanente</option>
+    <option value="rubber">Rubber gel</option>
+    <option value="bath">Baño de acrílico</option>
+    <option value="acripie">Acripié</option>
+  </select>
 
-<select id="service">
-
-  <option value="acrylic">
-    Set nuevo de acrílico
-  </option>
-
-  <option value="retouch">
-    Retoque de acrílico
-  </option>
-
-  <option value="gel">
-    Gel semipermanente
-  </option>
-
-  <option value="rubber">
-    Rubber gel
-  </option>
-
-  <option value="bath">
-    Baño de acrílico
-  </option>
-
-  <option value="acripie">
-    Acripié
-  </option>
-
-</select>
-
-
-<div id="gelBox" class="hidden">
-
-<label>Modalidad</label>
-
-<select id="gelType">
-
-  <option value="hands">
-    Manos — $220
-  </option>
-
-  <option value="feet">
-    Pies — $250
-  </option>
-
-  <option value="maniSpa">
-    Mani spa — $350
-  </option>
-
-  <option value="pediSpa">
-    Pedi spa — $400
-  </option>
-
-</select>
-
-</div>
-
+  <div id="gelBox" class="hidden">
+    <label for="gelType">Modalidad</label>
+    <select id="gelType">
+      <option value="hands">Manos</option>
+      <option value="feet">Pies</option>
+      <option value="maniSpa">Mani spa</option>
+      <option value="pediSpa">Pedi spa</option>
+    </select>
+  </div>
 </section>
-
-
-<!-- LARGO -->
 
 <section id="lengthCard" class="card">
-
-<h2>Largo</h2>
-
-<div id="lengths" class="lengths"></div>
-
+  <h2>Largo de uñas</h2>
+  <div id="lengths" class="lengths"></div>
 </section>
 
-
-<!-- EFECTOS -->
-
-<section id="effectsCard" class="card">
-
-<h2>
-Diseños y efectos
-<span class="muted">· por uña</span>
-</h2>
-
-<div id="effects"></div>
-
+<section class="card" id="effectsCard">
+  <h2>Diseños y efectos <span class="muted">· por uña</span></h2>
+  <div id="effects"></div>
 </section>
-
-
-<!-- EXTRAS -->
 
 <section class="card">
-
-<h2>Extras</h2>
-
-<div id="extras"></div>
-
+  <h2>Extras</h2>
+  <div id="extras"></div>
 </section>
-
-
-<!-- RESUMEN -->
 
 <section class="card">
+  <h2>Resumen del servicio</h2>
+  <div id="summary" class="summary"></div>
+  <div id="total" class="total">$400</div>
 
-<h2>Resumen</h2>
-
-<div id="summary" class="summary"></div>
-
-<div id="total" class="total">
-$0
-</div>
-
-<div class="actions">
-
-<button class="primary" id="share">
-Compartir
-</button>
-
-<button class="secondary" id="reset">
-Reiniciar
-</button>
-
-</div>
-
+  <div class="actions">
+    <button class="btn primary" id="share">Compartir precio</button>
+    <button class="btn secondary" id="reset">Reiniciar</button>
+    <button class="btn secondary full" id="editPrices">
+      Editar precios
+    </button>
+  </div>
 </section>
 
+<section class="card hidden" id="pricesCard">
+  <h2>Precios editables</h2>
+  <p class="muted">
+    Cambia los precios y guarda. Los importes se conservarán
+    en este navegador.
+  </p>
+
+  <div id="priceEditor"></div>
+
+  <div class="actions">
+    <button class="btn primary" id="savePrices">Guardar cambios</button>
+    <button class="btn secondary" id="cancelPrices">Cancelar</button>
+    <button class="btn secondary full" id="restorePrices">
+      Restaurar precios iniciales
+    </button>
+  </div>
+</section>
 
 <p class="note">
-Nuestros servicios incluyen uno o dos tonos lisos de gel semipermanente.
+  Nuestros servicios incluyen uno o dos tonos lisos de gel semipermanente.
 </p>
 
 </div>
 
-
 <script>
+"use strict";
 
-/* =====================================================
-   PRECIOS DEFINITIVOS ÉLORA
-===================================================== */
+/* =========================================
+   PRECIOS INICIALES
+========================================= */
 
 const defaultPrices = {
+  lengths: [400, 450, 500, 550, 600],
 
-  /* LARGOS */
+  gel: {
+    hands: 300,
+    feet: 300,
+    maniSpa: 400,
+    pediSpa: 400
+  },
 
-  length: [
-    350,
-    400,
-    450,
-    500,
-    600
-  ],
-
-  /* GEL */
-
-  gel: [
-    250,
-    250,
-    250,
-    250
-  ],
-
-  /* SERVICIOS */
-
-  rubber: 300,
-
-  bath: 300,
-
+  rubber: 350,
+  bath: 350,
   acripie: 500,
 
-  /* EXTRAS */
-
-  extension: 30,
-
-  removeGel: 50,
-
-  removeAcrylic: 100,
-
-  removeOther: 150,
-
-  /* EFECTOS */
+  extras: {
+    repair: 50,
+    removeGel: 50,
+    removeAcrylic: 100,
+    removeOther: 150
+  },
 
   effects: [
-
     10, // Ojo de gato
     10, // Espejo
     10, // Aurora
@@ -416,22 +376,14 @@ const defaultPrices = {
     20, // Cristales CH
     30, // Cristales M
     40, // Cristales G
-    20, // Uña completa cristal L1-2
-    35, // Uña completa cristal L3-4
-    50, // Uña completa cristal L5-6
+    20, // Uña completa cristal largo 1-2
+    35, // Uña completa cristal largo 3-4
+    50, // Uña completa cristal largo 5-6
     10  // Jelly
-
   ]
-
 };
 
-
-/* =====================================================
-   NOMBRES DE EFECTOS
-===================================================== */
-
 const effectNames = [
-
   "Ojo de gato",
   "Espejo",
   "Aurora",
@@ -461,679 +413,562 @@ const effectNames = [
   "Uña completa cristal (largo 3-4)",
   "Uña completa cristal (largo 5-6)",
   "Jelly"
-
 ];
 
-
-/* =====================================================
-   PRECIOS EDITABLES
-===================================================== */
-
-let prices =
-  JSON.parse(localStorage.getItem("eloraPrices")) ||
-  JSON.parse(JSON.stringify(defaultPrices));
-
-
-/* =====================================================
-   MIGRACIÓN DE PRECIOS
-   Agrega nuevos efectos sin borrar precios
-   personalizados anteriores.
-===================================================== */
-
-if (!Array.isArray(prices.effects)) {
-  prices.effects = [];
-}
-
-if (prices.effects.length < defaultPrices.effects.length) {
-
-  prices.effects = prices.effects.concat(
-    defaultPrices.effects.slice(
-      prices.effects.length
-    )
-  );
-
-  localStorage.setItem(
-    "eloraPrices",
-    JSON.stringify(prices)
-  );
-}
-
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
-let selectedLength = 0;
-
-let effectCounts =
-  new Array(effectNames.length).fill(0);
-
-let extras = {
-
-  extension: 0,
-
-  removeGel: 0,
-
-  removeAcrylic: 0,
-
-  removeOther: 0
-
+const serviceNames = {
+  acrylic: "Set nuevo de acrílico",
+  retouch: "Retoque de acrílico",
+  gel: "Gel semipermanente",
+  rubber: "Rubber gel",
+  bath: "Baño de acrílico",
+  acripie: "Acripié"
 };
 
-
-/* =====================================================
-   ELEMENTOS
-===================================================== */
-
-const service =
-  document.getElementById("service");
-
-const gelBox =
-  document.getElementById("gelBox");
-
-const gelType =
-  document.getElementById("gelType");
-
-const lengthCard =
-  document.getElementById("lengthCard");
-
-const effectsCard =
-  document.getElementById("effectsCard");
-
-const lengths =
-  document.getElementById("lengths");
-
-const effects =
-  document.getElementById("effects");
-
-const extrasContainer =
-  document.getElementById("extras");
-
-const summary =
-  document.getElementById("summary");
-
-const totalElement =
-  document.getElementById("total");
-
-const shareButton =
-  document.getElementById("share");
-
-const resetButton =
-  document.getElementById("reset");
-
-
-/* =====================================================
-   FORMATO DE DINERO
-===================================================== */
-
-function money(value) {
-
-  return "$" +
-    value.toLocaleString("es-MX");
-
-}
-
-
-/* =====================================================
-   RENDER LARGOS
-===================================================== */
-
-function renderLengths() {
-
-  lengths.innerHTML =
-    prices.length.map((price, index) => {
-
-      return `
-
-        <button
-          class="length ${index === selectedLength ? "active" : ""}"
-          onclick="setLength(${index})"
-        >
-
-          <b>
-            Largo ${index + 1}
-          </b>
-
-          <span>
-            ${money(price)}
-          </span>
-
-        </button>
-
-      `;
-
-    }).join("");
-
-}
-
-
-function setLength(index) {
-
-  selectedLength = index;
-
-  renderLengths();
-
-  calculate();
-
-}
-
-
-/* =====================================================
-   RENDER EFECTOS
-===================================================== */
-
-function renderEffects() {
-
-  effects.innerHTML =
-    effectNames.map((name, index) => {
-
-      return `
-
-        <div class="effect">
-
-          <span class="name">
-
-            ${name}
-
-            <br>
-
-            <span class="muted">
-
-              ${money(prices.effects[index])}
-              / uña
-
-            </span>
-
-          </span>
-
-
-          <div class="qty">
-
-            <button
-              onclick="changeEffect(${index}, -1)"
-            >
-              −
-            </button>
-
-            <span>
-              ${effectCounts[index]}
-            </span>
-
-            <button
-              onclick="changeEffect(${index}, 1)"
-            >
-              +
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
-}
-
-
-function changeEffect(index, amount) {
-
-  effectCounts[index] =
-    Math.max(
-      0,
-      effectCounts[index] + amount
-    );
-
-  renderEffects();
-
-  calculate();
-
-}
-
-
-/* =====================================================
-   EXTRAS
-===================================================== */
+const gelNames = {
+  hands: "Manos",
+  feet: "Pies",
+  maniSpa: "Mani spa",
+  pediSpa: "Pedi spa"
+};
 
 const extraNames = {
-
-  extension:
-    "Extensión de uña",
-
-  removeGel:
-    "Retiro de gel",
-
-  removeAcrylic:
-    "Retiro de acrílico",
-
-  removeOther:
-    "Retiro de otro salón"
-
+  repair: "Reparación de uña",
+  removeGel: "Retiro de gel",
+  removeAcrylic: "Retiro de acrílico",
+  removeOther: "Retiro de acrílico de otro salón"
 };
 
+/* =========================================
+   PRECIOS GUARDADOS
+========================================= */
+
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function validPrice(value) {
+  return value !== "" &&
+    value !== null &&
+    Number.isFinite(Number(value)) &&
+    Number(value) >= 0;
+}
+
+function loadPrices() {
+  let saved;
+
+  try {
+    saved = JSON.parse(localStorage.getItem("eloraPrices"));
+  } catch (error) {
+    saved = null;
+  }
+
+  const result = clone(defaultPrices);
+
+  if (!saved || typeof saved !== "object") {
+    return result;
+  }
+
+  if (Array.isArray(saved.lengths)) {
+    saved.lengths.forEach((value, i) => {
+      if (i < result.lengths.length && validPrice(value)) {
+        result.lengths[i] = Number(value);
+      }
+    });
+  }
+
+  if (saved.gel && typeof saved.gel === "object") {
+    Object.keys(result.gel).forEach(key => {
+      if (validPrice(saved.gel[key])) {
+        result.gel[key] = Number(saved.gel[key]);
+      }
+    });
+  }
+
+  ["rubber", "bath", "acripie"].forEach(key => {
+    if (validPrice(saved[key])) result[key] = Number(saved[key]);
+  });
+
+  if (saved.extras && typeof saved.extras === "object") {
+    Object.keys(result.extras).forEach(key => {
+      if (validPrice(saved.extras[key])) {
+        result.extras[key] = Number(saved.extras[key]);
+      }
+    });
+  }
+
+  if (Array.isArray(saved.effects)) {
+    saved.effects.forEach((value, i) => {
+      if (i < result.effects.length && validPrice(value)) {
+        result.effects[i] = Number(value);
+      }
+    });
+  }
+
+  return result;
+}
+
+let prices = loadPrices();
+let selectedLength = 0;
+let effectCounts = Array(effectNames.length).fill(0);
+
+let extras = {
+  repair: 0,
+  removeGel: 0,
+  removeAcrylic: 0,
+  removeOther: 0
+};
+
+/* =========================================
+   ELEMENTOS
+========================================= */
+
+const $ = id => document.getElementById(id);
+
+const service = $("service");
+const gelType = $("gelType");
+const gelBox = $("gelBox");
+const lengthCard = $("lengthCard");
+const lengthsContainer = $("lengths");
+const effectsContainer = $("effects");
+const extrasContainer = $("extras");
+const summary = $("summary");
+const totalElement = $("total");
+const pricesCard = $("pricesCard");
+const priceEditor = $("priceEditor");
+
+/* =========================================
+   UTILIDADES
+========================================= */
+
+function money(value) {
+  return "$" + Number(value).toLocaleString("es-MX", {
+    maximumFractionDigits: 2
+  });
+}
+
+function savePrices() {
+  try {
+    localStorage.setItem("eloraPrices", JSON.stringify(prices));
+    return true;
+  } catch (error) {
+    alert("No fue posible guardar los precios en este navegador.");
+    return false;
+  }
+}
+
+/* =========================================
+   LARGOS
+========================================= */
+
+function renderLengths() {
+  lengthsContainer.innerHTML = prices.lengths.map((price, i) => `
+    <button type="button"
+      class="length ${i === selectedLength ? "active" : ""}"
+      aria-pressed="${i === selectedLength}"
+      onclick="setLength(${i})">
+      <b>Largo ${i + 1}</b>
+      <span>${money(price)}</span>
+    </button>
+  `).join("");
+}
+
+function setLength(index) {
+  selectedLength = index;
+  renderLengths();
+  calculate();
+}
+
+/* =========================================
+   DISEÑOS Y EFECTOS
+========================================= */
+
+function renderEffects() {
+  effectsContainer.innerHTML = effectNames.map((name, i) => `
+    <div class="effect">
+      <div class="effect-name">
+        ${name}
+        <br>
+        <span class="muted">${money(prices.effects[i])} por uña</span>
+      </div>
+
+      <div class="qty">
+        <button type="button"
+          aria-label="Quitar ${name}"
+          onclick="changeEffect(${i}, -1)">−</button>
+
+        <span>${effectCounts[i]}</span>
+
+        <button type="button"
+          aria-label="Agregar ${name}"
+          onclick="changeEffect(${i}, 1)">+</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function changeEffect(index, amount) {
+  effectCounts[index] = Math.max(
+    0,
+    effectCounts[index] + amount
+  );
+
+  renderEffects();
+  calculate();
+}
+
+/* =========================================
+   EXTRAS
+========================================= */
 
 function renderExtras() {
+  extrasContainer.innerHTML = Object.keys(extraNames).map(key => `
+    <div class="effect">
+      <div class="effect-name">
+        ${extraNames[key]}
+        <br>
+        <span class="muted">${money(prices.extras[key])} por unidad</span>
+      </div>
 
-  extrasContainer.innerHTML =
-    Object.keys(extraNames).map(key => {
+      <div class="qty">
+        <button type="button"
+          aria-label="Quitar ${extraNames[key]}"
+          onclick="changeExtra('${key}', -1)">−</button>
 
-      return `
+        <span>${extras[key]}</span>
 
-        <div class="effect">
-
-          <span class="name">
-
-            ${extraNames[key]}
-
-            <br>
-
-            <span class="muted">
-
-              ${money(prices[key])}
-              / unidad
-
-            </span>
-
-          </span>
-
-
-          <div class="qty">
-
-            <button
-              onclick="changeExtra('${key}', -1)"
-            >
-              −
-            </button>
-
-            <span>
-              ${extras[key]}
-            </span>
-
-            <button
-              onclick="changeExtra('${key}', 1)"
-            >
-              +
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
-
+        <button type="button"
+          aria-label="Agregar ${extraNames[key]}"
+          onclick="changeExtra('${key}', 1)">+</button>
+      </div>
+    </div>
+  `).join("");
 }
-
 
 function changeExtra(key, amount) {
-
-  extras[key] =
-    Math.max(
-      0,
-      extras[key] + amount
-    );
-
+  extras[key] = Math.max(0, extras[key] + amount);
   renderExtras();
-
   calculate();
-
 }
 
-
-/* =====================================================
+/* =========================================
    PRECIO BASE
-===================================================== */
+========================================= */
 
 function getBasePrice() {
+  switch (service.value) {
+    case "acrylic":
+    case "retouch":
+      return prices.lengths[selectedLength];
 
-  const selected =
-    service.value;
+    case "gel":
+      return prices.gel[gelType.value];
 
+    case "rubber":
+      return prices.rubber;
 
-  if (
-    selected === "acrylic" ||
-    selected === "retouch"
-  ) {
+    case "bath":
+      return prices.bath;
 
-    return prices.length[selectedLength];
+    case "acripie":
+      return prices.acripie;
 
+    default:
+      return 0;
   }
-
-
-  if (selected === "gel") {
-
-    return prices.gel[
-      gelType.selectedIndex
-    ];
-
-  }
-
-
-  return prices[selected];
-
 }
 
-
-/* =====================================================
-   CÁLCULO TOTAL
-===================================================== */
+/* =========================================
+   CÁLCULO Y RESUMEN
+========================================= */
 
 function calculate() {
+  const base = getBasePrice();
 
-  const base =
-    getBasePrice();
-
-
-  let effectsTotal = 0;
-
-
-  effectCounts.forEach(
-    (count, index) => {
-
-      effectsTotal +=
-        count *
-        prices.effects[index];
-
-    }
+  const effectsTotal = effectCounts.reduce(
+    (sum, count, i) => sum + count * prices.effects[i],
+    0
   );
 
-
-  let extrasTotal = 0;
-
-
-  Object.keys(extras).forEach(key => {
-
-    extrasTotal +=
-      extras[key] *
-      prices[key];
-
-  });
-
-
-  const total =
-    base +
-    effectsTotal +
-    extrasTotal;
-
-
-  let lines = [];
-
-
-  lines.push(
-    service.options[
-      service.selectedIndex
-    ].text +
-    ": " +
-    money(base)
+  const extrasTotal = Object.keys(extras).reduce(
+    (sum, key) => sum + extras[key] * prices.extras[key],
+    0
   );
 
+  const total = base + effectsTotal + extrasTotal;
 
-  if (
-    service.value === "acrylic" ||
-    service.value === "retouch"
-  ) {
+  const lines = [];
 
-    lines[0] +=
-      " · Largo " +
-      (selectedLength + 1);
+  let description = serviceNames[service.value];
 
+  if (service.value === "gel") {
+    description += " · " + gelNames[gelType.value];
   }
 
+  if (service.value === "acrylic" || service.value === "retouch") {
+    description += " · Largo " + (selectedLength + 1);
+  }
 
-  effectCounts.forEach(
-    (count, index) => {
+  lines.push([description, base]);
 
-      if (count > 0) {
-
-        lines.push(
-
-          effectNames[index] +
-          " × " +
-          count +
-          ": " +
-          money(
-            count *
-            prices.effects[index]
-          )
-
-        );
-
-      }
-
+  effectCounts.forEach((count, i) => {
+    if (count > 0) {
+      lines.push([
+        effectNames[i] + " × " + count,
+        count * prices.effects[i]
+      ]);
     }
-  );
-
-
-  Object.keys(extras).forEach(key => {
-
-    if (extras[key] > 0) {
-
-      lines.push(
-
-        extraNames[key] +
-        " × " +
-        extras[key] +
-        ": " +
-        money(
-          extras[key] *
-          prices[key]
-        )
-
-      );
-
-    }
-
   });
 
+  Object.keys(extras).forEach(key => {
+    if (extras[key] > 0) {
+      lines.push([
+        extraNames[key] + " × " + extras[key],
+        extras[key] * prices.extras[key]
+      ]);
+    }
+  });
 
-  summary.innerHTML =
-    lines.join("<br>");
+  summary.replaceChildren();
 
+  lines.forEach(([label, amount]) => {
+    const row = document.createElement("div");
+    row.className = "summary-line";
 
-  totalElement.textContent =
-    money(total);
+    const name = document.createElement("span");
+    name.textContent = label;
 
+    const value = document.createElement("span");
+    value.textContent = money(amount);
 
+    row.append(name, value);
+    summary.appendChild(row);
+  });
+
+  totalElement.textContent = money(total);
   return total;
-
 }
 
-
-/* =====================================================
-   MOSTRAR / OCULTAR SECCIONES
-===================================================== */
+/* =========================================
+   SECCIONES
+========================================= */
 
 function updateSections() {
-
-  const selected =
-    service.value;
-
-
   const isAcrylic =
-    selected === "acrylic" ||
-    selected === "retouch";
+    service.value === "acrylic" ||
+    service.value === "retouch";
 
+  lengthCard.classList.toggle("hidden", !isAcrylic);
+  gelBox.classList.toggle("hidden", service.value !== "gel");
 
-  /*
-
-     EL LARGO SOLO SE MUESTRA
-     PARA ACRÍLICO Y RETOQUE.
-
-  */
-
-  lengthCard.classList.toggle(
-    "hidden",
-    !isAcrylic
-  );
-
-
-  /*
-
-     DISEÑOS Y EFECTOS SIEMPRE
-     DEBEN ESTAR VISIBLES.
-
-  */
-
-  effectsCard.classList.remove("hidden");
-
-
-  /*
-
-     LA MODALIDAD SOLO APARECE
-     PARA GEL SEMIPERMANENTE.
-
-  */
-
-  gelBox.classList.toggle(
-    "hidden",
-    selected !== "gel"
-  );
-
+  // Los diseños y efectos nunca se ocultan al cambiar de servicio.
+  $("effectsCard").classList.remove("hidden");
 
   calculate();
-
 }
 
+service.addEventListener("change", updateSections);
+gelType.addEventListener("change", calculate);
 
-/* =====================================================
-   EVENTOS
-===================================================== */
+/* =========================================
+   EDITOR DE PRECIOS
+========================================= */
 
-service.addEventListener(
-  "change",
-  updateSections
-);
+function addPriceInput(label, path, value) {
+  const row = document.createElement("div");
+  row.className = "price-row";
 
+  const title = document.createElement("label");
+  title.textContent = label;
 
-gelType.addEventListener(
-  "change",
-  calculate
-);
+  const input = document.createElement("input");
+  input.type = "number";
+  input.min = "0";
+  input.step = "1";
+  input.value = value;
+  input.dataset.path = path;
+  input.setAttribute("aria-label", label);
 
+  row.append(title, input);
+  priceEditor.appendChild(row);
+}
 
-/* =====================================================
-   COMPARTIR
-===================================================== */
+function openPriceEditor() {
+  priceEditor.replaceChildren();
 
-shareButton.addEventListener(
-  "click",
-  async () => {
+  prices.lengths.forEach((value, i) => {
+    addPriceInput("Largo " + (i + 1), "lengths." + i, value);
+  });
 
-    const text =
-
-      "ÉLORA studio\n\n" +
-
-      summary.innerText +
-
-      "\n\nTotal: " +
-
-      totalElement.innerText;
-
-
-    if (
-      navigator.share
-    ) {
-
-      try {
-
-        await navigator.share({
-
-          title:
-            "ÉLORA studio",
-
-          text:
-            text
-
-        });
-
-      } catch (error) {}
-
-      return;
-
-    }
-
-
-    try {
-
-      await navigator.clipboard.writeText(
-        text
-      );
-
-
-      shareButton.textContent =
-        "¡Copiado!";
-
-
-      setTimeout(() => {
-
-        shareButton.textContent =
-          "Compartir";
-
-      }, 1500);
-
-
-    } catch (error) {
-
-      alert(text);
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   REINICIAR
-===================================================== */
-
-resetButton.addEventListener(
-  "click",
-  () => {
-
-    selectedLength = 0;
-
-    effectCounts.fill(0);
-
-
-    Object.keys(extras).forEach(
-      key => {
-
-        extras[key] = 0;
-
-      }
+  Object.keys(prices.gel).forEach(key => {
+    addPriceInput(
+      "Gel · " + gelNames[key],
+      "gel." + key,
+      prices.gel[key]
     );
+  });
 
+  ["rubber", "bath", "acripie"].forEach(key => {
+    addPriceInput(serviceNames[key], key, prices[key]);
+  });
 
-    service.value =
-      "acrylic";
+  Object.keys(prices.extras).forEach(key => {
+    addPriceInput(
+      extraNames[key],
+      "extras." + key,
+      prices.extras[key]
+    );
+  });
 
+  effectNames.forEach((name, i) => {
+    addPriceInput(name + " · por uña", "effects." + i, prices.effects[i]);
+  });
 
-    renderLengths();
+  pricesCard.classList.remove("hidden");
+  pricesCard.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
-    renderEffects();
+$("editPrices").addEventListener("click", openPriceEditor);
 
-    renderExtras();
+$("savePrices").addEventListener("click", () => {
+  const inputs = [...priceEditor.querySelectorAll("input")];
 
-    updateSections();
-
+  for (const input of inputs) {
+    if (!validPrice(input.value)) {
+      alert("Todos los precios deben ser números iguales o mayores que cero.");
+      input.focus();
+      return;
+    }
   }
-);
 
+  const updated = clone(prices);
 
-/* =====================================================
-   INICIAR
-===================================================== */
+  inputs.forEach(input => {
+    const parts = input.dataset.path.split(".");
+    const value = Number(input.value);
+
+    if (parts.length === 1) {
+      updated[parts[0]] = value;
+    } else {
+      const index = /^\d+$/.test(parts[1])
+        ? Number(parts[1])
+        : parts[1];
+
+      updated[parts[0]][index] = value;
+    }
+  });
+
+  const previous = prices;
+  prices = updated;
+
+  if (!savePrices()) {
+    prices = previous;
+    return;
+  }
+
+  renderLengths();
+  renderEffects();
+  renderExtras();
+  calculate();
+
+  pricesCard.classList.add("hidden");
+  alert("Precios guardados correctamente.");
+});
+
+$("cancelPrices").addEventListener("click", () => {
+  pricesCard.classList.add("hidden");
+});
+
+$("restorePrices").addEventListener("click", () => {
+  const confirmed = confirm(
+    "¿Restaurar todos los precios iniciales? " +
+    "Se perderán los precios personalizados."
+  );
+
+  if (!confirmed) return;
+
+  const previous = prices;
+  prices = clone(defaultPrices);
+
+  if (!savePrices()) {
+    prices = previous;
+    return;
+  }
+
+  renderLengths();
+  renderEffects();
+  renderExtras();
+  calculate();
+  openPriceEditor();
+});
+
+/* =========================================
+   COMPARTIR
+========================================= */
+
+$("share").addEventListener("click", async () => {
+  const text = [
+    "ÉLORA studio",
+    "",
+    summary.innerText,
+    "",
+    "Total: " + totalElement.innerText
+  ].join("\n");
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "ÉLORA studio",
+        text: text
+      });
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        alert("No fue posible compartir. Intenta nuevamente.");
+      }
+    }
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    $("share").textContent = "¡Copiado!";
+    setTimeout(() => {
+      $("share").textContent = "Compartir precio";
+    }, 1800);
+  } catch (error) {
+    prompt("Copia el resumen para compartirlo:", text);
+  }
+});
+
+/* =========================================
+   REINICIAR
+========================================= */
+
+$("reset").addEventListener("click", () => {
+  selectedLength = 0;
+  effectCounts.fill(0);
+
+  Object.keys(extras).forEach(key => {
+    extras[key] = 0;
+  });
+
+  service.value = "acrylic";
+  gelType.value = "hands";
+  pricesCard.classList.add("hidden");
+
+  renderLengths();
+  renderEffects();
+  renderExtras();
+  updateSections();
+});
+
+/* =========================================
+   INICIO
+========================================= */
 
 renderLengths();
-
 renderEffects();
-
 renderExtras();
-
 updateSections();
-
 </script>
-
 </body>
 </html>
