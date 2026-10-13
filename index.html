@@ -261,10 +261,10 @@ select, input[type="number"] {
   <div id="gelBox" class="hidden">
     <label for="gelType">Modalidad</label>
     <select id="gelType">
-      <option value="hands">Manos</option>
-      <option value="feet">Pies</option>
-      <option value="maniSpa">Mani spa</option>
-      <option value="pediSpa">Pedi spa</option>
+      <option value="hands">Manos — $250</option>
+      <option value="feet">Pies — $250</option>
+      <option value="maniSpa">Mani spa — $300</option>
+      <option value="pediSpa">Pedi spa — $350</option>
     </select>
   </div>
 </section>
@@ -287,7 +287,7 @@ select, input[type="number"] {
 <section class="card">
   <h2>Resumen del servicio</h2>
   <div id="summary" class="summary"></div>
-  <div id="total" class="total">$400</div>
+  <div id="total" class="total">$350</div>
 
   <div class="actions">
     <button class="btn primary" id="share">Compartir precio</button>
@@ -301,7 +301,7 @@ select, input[type="number"] {
 <section class="card hidden" id="pricesCard">
   <h2>Precios editables</h2>
   <p class="muted">
-    Cambia los precios y guarda. Los importes se conservarán
+    Modifica los importes y guarda los cambios. Los precios se conservarán
     en este navegador.
   </p>
 
@@ -326,22 +326,22 @@ select, input[type="number"] {
 "use strict";
 
 /* =========================================
-   PRECIOS INICIALES
+   PRECIOS INICIALES ÉLORA
 ========================================= */
 
 const defaultPrices = {
-  lengths: [400, 450, 500, 550, 600],
+  lengths: [350, 400, 450, 500, 600],
 
   gel: {
-    hands: 300,
-    feet: 300,
-    maniSpa: 400,
-    pediSpa: 400
+    hands: 250,
+    feet: 250,
+    maniSpa: 300,
+    pediSpa: 350
   },
 
-  rubber: 350,
-  bath: 350,
-  acripie: 500,
+  rubber: 300,
+  bath: 300,
+  acripie: 450,
 
   extras: {
     repair: 50,
@@ -382,6 +382,9 @@ const defaultPrices = {
     10  // Jelly
   ]
 };
+
+/* Versión actualizada de precios base */
+const PRICE_VERSION = 7;
 
 const effectNames = [
   "Ojo de gato",
@@ -439,7 +442,7 @@ const extraNames = {
 };
 
 /* =========================================
-   PRECIOS GUARDADOS
+   CARGA Y MIGRACIÓN DE PRECIOS
 ========================================= */
 
 function clone(obj) {
@@ -454,7 +457,7 @@ function validPrice(value) {
 }
 
 function loadPrices() {
-  let saved;
+  let saved = null;
 
   try {
     saved = JSON.parse(localStorage.getItem("eloraPrices"));
@@ -485,7 +488,9 @@ function loadPrices() {
   }
 
   ["rubber", "bath", "acripie"].forEach(key => {
-    if (validPrice(saved[key])) result[key] = Number(saved[key]);
+    if (validPrice(saved[key])) {
+      result[key] = Number(saved[key]);
+    }
   });
 
   if (saved.extras && typeof saved.extras === "object") {
@@ -508,6 +513,40 @@ function loadPrices() {
 }
 
 let prices = loadPrices();
+
+function migratePrices() {
+  let savedVersion = 0;
+
+  try {
+    savedVersion = Number(
+      localStorage.getItem("eloraPricesVersion") || 0
+    );
+  } catch (error) {}
+
+  if (savedVersion >= PRICE_VERSION) {
+    return;
+  }
+
+  /*
+    Actualiza los precios base.
+    Conserva los precios personalizados de diseños y extras.
+  */
+  prices.lengths = clone(defaultPrices.lengths);
+  prices.gel = clone(defaultPrices.gel);
+  prices.rubber = defaultPrices.rubber;
+  prices.bath = defaultPrices.bath;
+  prices.acripie = defaultPrices.acripie;
+
+  try {
+    localStorage.setItem("eloraPrices", JSON.stringify(prices));
+    localStorage.setItem("eloraPricesVersion", String(PRICE_VERSION));
+  } catch (error) {
+    console.warn("No se pudo guardar la actualización de precios.");
+  }
+}
+
+migratePrices();
+
 let selectedLength = 0;
 let effectCounts = Array(effectNames.length).fill(0);
 
@@ -549,6 +588,7 @@ function money(value) {
 function savePrices() {
   try {
     localStorage.setItem("eloraPrices", JSON.stringify(prices));
+    localStorage.setItem("eloraPricesVersion", String(PRICE_VERSION));
     return true;
   } catch (error) {
     alert("No fue posible guardar los precios en este navegador.");
@@ -695,7 +735,6 @@ function calculate() {
   );
 
   const total = base + effectsTotal + extrasTotal;
-
   const lines = [];
 
   let description = serviceNames[service.value];
@@ -760,7 +799,7 @@ function updateSections() {
   lengthCard.classList.toggle("hidden", !isAcrylic);
   gelBox.classList.toggle("hidden", service.value !== "gel");
 
-  // Los diseños y efectos nunca se ocultan al cambiar de servicio.
+  // Los diseños y efectos permanecen visibles en todos los servicios.
   $("effectsCard").classList.remove("hidden");
 
   calculate();
@@ -820,11 +859,18 @@ function openPriceEditor() {
   });
 
   effectNames.forEach((name, i) => {
-    addPriceInput(name + " · por uña", "effects." + i, prices.effects[i]);
+    addPriceInput(
+      name + " · por uña",
+      "effects." + i,
+      prices.effects[i]
+    );
   });
 
   pricesCard.classList.remove("hidden");
-  pricesCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  pricesCard.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 $("editPrices").addEventListener("click", openPriceEditor);
@@ -879,12 +925,10 @@ $("cancelPrices").addEventListener("click", () => {
 });
 
 $("restorePrices").addEventListener("click", () => {
-  const confirmed = confirm(
+  if (!confirm(
     "¿Restaurar todos los precios iniciales? " +
     "Se perderán los precios personalizados."
-  );
-
-  if (!confirmed) return;
+  )) return;
 
   const previous = prices;
   prices = clone(defaultPrices);
@@ -917,58 +961,4 @@ $("share").addEventListener("click", async () => {
   if (navigator.share) {
     try {
       await navigator.share({
-        title: "ÉLORA studio",
-        text: text
-      });
-    } catch (error) {
-      if (error.name !== "AbortError") {
-        alert("No fue posible compartir. Intenta nuevamente.");
-      }
-    }
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(text);
-    $("share").textContent = "¡Copiado!";
-    setTimeout(() => {
-      $("share").textContent = "Compartir precio";
-    }, 1800);
-  } catch (error) {
-    prompt("Copia el resumen para compartirlo:", text);
-  }
-});
-
-/* =========================================
-   REINICIAR
-========================================= */
-
-$("reset").addEventListener("click", () => {
-  selectedLength = 0;
-  effectCounts.fill(0);
-
-  Object.keys(extras).forEach(key => {
-    extras[key] = 0;
-  });
-
-  service.value = "acrylic";
-  gelType.value = "hands";
-  pricesCard.classList.add("hidden");
-
-  renderLengths();
-  renderEffects();
-  renderExtras();
-  updateSections();
-});
-
-/* =========================================
-   INICIO
-========================================= */
-
-renderLengths();
-renderEffects();
-renderExtras();
-updateSections();
-</script>
-</body>
-</html>
+ 
