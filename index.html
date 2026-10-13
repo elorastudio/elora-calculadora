@@ -961,4 +961,59 @@ $("share").addEventListener("click", async () => {
   if (navigator.share) {
     try {
       await navigator.share({
- 
+        title: "ÉLORA studio",
+        text
+      });
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        alert("No fue posible compartir. Intenta nuevamente.");
+      }
+    }
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    $("share").textContent = "¡Copiado!";
+
+    setTimeout(() => {
+      $("share").textContent = "Compartir precio";
+    }, 1800);
+  } catch (error) {
+    prompt("Copia el resumen para compartirlo:", text);
+  }
+});
+
+/* =========================================
+   REINICIAR
+========================================= */
+
+$("reset").addEventListener("click", () => {
+  selectedLength = 0;
+  effectCounts.fill(0);
+
+  Object.keys(extras).forEach(key => {
+    extras[key] = 0;
+  });
+
+  service.value = "acrylic";
+  gelType.value = "hands";
+  pricesCard.classList.add("hidden");
+
+  renderLengths();
+  renderEffects();
+  renderExtras();
+  updateSections();
+});
+
+/* =========================================
+   INICIO
+========================================= */
+
+renderLengths();
+renderEffects();
+renderExtras();
+updateSections();
+</script>
+</body>
+</html>
